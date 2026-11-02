@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0c0f14">
+<title>Game Gabung-Gabung</title>
+<style>
+:root {
+  --bg-app: #0c0f14;
+  --bg-surface: #141923;
+  --bg-card: #1c2230;
+  --bg-cell: #18202f;
+  --border-subtle: #242d40;
+  --border-strong: #33405a;
+  --text-main: #f1f5f9;
+  --text-muted: #cbd5e1;
+  --text-dim: #94a3b8;
+  --color-primary: #22c55e;
+  --color-primary-hover: #16a34a;
+  --color-primary-text: #052e16;
+  --color-warning: #f59e0b;
+  --color-danger: #f87171;
+  --color-focus: #38bdf8;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --touch-min: 44px;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: var(--bg-app);
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Accessibility screen-reader only class */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Focus outline for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* ----------------- HOMESCREEN ----------------- */
+#homeScreen {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center top, #161c28 0%, #0c0f14 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px;
+  z-index: 200;
+  transition: opacity .25s ease, visibility .25s;
+}
+
+#homeScreen.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.home-content {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.home-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.hero-tile {
+  width: 68px;
+  height: 68px;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.45);
+  transform: rotate(-6deg);
+  transition: transform .3s;
+}
+
+.hero-tile.mid {
+  width: 86px;
+  height: 86px;
+  transform: rotate(0deg) scale(1.08);
+  border-color: var(--color-primary);
+  z-index: 2;
+}
+
+.hero-tile.right {
+  transform: rotate(6deg);
+}
+
+.home-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+  color: var(--text-main);
+}
+
+.home-desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 24px;
+  line-height: 1.5;
+  padding: 0 10px;
+}
+
+.home-records {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 26px;
+}
+
+.record-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.record-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.record-card b {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-warning);
+  margin-top: 4px;
+  display: block;
+}
+
+.btn-play-main {
+  width: 100%;
+  min-height: 52px;
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  transition: transform .12s, background-color .15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-play-main:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-play-main:active {
+  transform: scale(.98);
+}
+
+.btn-home-settings {
+  width: 100%;
+  min-height: var(--touch-min);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 12px;
+  cursor: pointer;
+  transition: background-color .15s, color .15s;
+}
+
+.btn-home-settings:hover {
+  background: var(--bg-card);
+  color: var(--text-main);
+}
+
+/* ----------------- GAME SCREEN ----------------- */
+#app {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  max-width: 500px;
+}
+
+.stats {
+  display: flex;
+  gap: 16px;
+}
+
+.stat-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 600;
+}
+
+.stat-value {
+  font-size: 20px;
+  color: var(--text-main);
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.stat-value.highlight {
+  color: var(--color-warning);
+}
+
+.stat-value.target {
+  color: var(--color-primary);
+}
+
+.header-btns {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.icon-btn {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-main);
+  border-radius: 10px;
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  padding: 8px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  cursor: pointer;
+  transition: background-color .15s, border-color .15s, opacity .15s;
+}
+
+.icon-btn:hover {
+  background: var(--bg-card);
+  border-color: var(--border-strong);
+}
+
+.icon-btn:active {
+  transform: scale(.96);
+}
+
+.icon-btn:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+#targetBar {
+  width: 100%;
+  max-width: 500px;
+  padding: 6px 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.target-hint {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.target-badge {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.target-badge span.dots {
+  display: flex;
+  gap: 5px;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border-subtle);
+  border: 1px solid var(--border-strong);
+  transition: background-color .2s, border-color .2s, transform .2s;
+}
+
+.dot.filled {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: scale(1.15);
+}
+
+#boardWrap {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 10px;
+}
+
+#board {
+  position: relative;
+  width: min(92vw, calc(100vh - 240px));
+  aspect-ratio: 1;
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.55);
+  touch-action: none;
+}
+
+.cell {
+  position: absolute;
+  width: 33.333%;
+  height: 33.333%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 6px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-cell);
+  transition: background-color .15s, border-color .15s;
+  cursor: pointer;
+}
+
+.cell:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: -2px;
+  z-index: 10;
+}
+
+.cell.hl {
+  background: rgba(56, 189, 248, 0.2);
+  border: 2px solid var(--color-focus);
+}
+
+.cell.selected-cell {
+  background: rgba(34, 197, 94, 0.22);
+  border: 2px solid var(--color-primary);
+}
+
+.cell.shake {
+  animation: shakeCell .28s ease-in-out;
+}
+
+@keyframes shakeCell {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.tile {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-md);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  touch-action: none;
+  position: relative;
+  transition: transform .12s cubic-bezier(.2, 0, .2, 1);
+  cursor: grab;
+}
+
+.tile .lv {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(12, 15, 20, 0.88);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 800;
+  border-radius: 6px;
+  padding: 2px 7px;
+  letter-spacing: .2px;
+  border: 1px solid var(--border-subtle);
+}
+
+.tile.drag {
+  z-index: 100;
+  transition: none;
+  pointer-events: none;
+  transform: scale(1.12);
+  box-shadow: 0 16px 28px rgba(0, 0, 0, 0.65);
+}
+
+.tile.pop {
+  animation: pop .28s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+@keyframes pop {
+  0% { transform: scale(.55); }
+  60% { transform: scale(1.18); }
+  100% { transform: scale(1); }
+}
+
+.float-text {
+  position: absolute;
+  color: var(--color-warning);
+  font-size: 19px;
+  font-weight: 900;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  animation: floatUp .65s forwards;
+  z-index: 60;
+}
+
+@keyframes floatUp {
+  0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  100% { opacity: 0; transform: translate(-50%, -85px) scale(1.35); }
+}
+
+#legendWrap {
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4px 14px 16px;
+}
+
+.legend-title {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+#legend {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.legend-item {
+  width: 48px;
+  height: 48px;
+  background-color: var(--bg-surface);
+  border-radius: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  border: 1px solid var(--border-subtle);
+}
+
+.legend-item span {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 11px;
+  color: var(--text-main);
+  font-weight: 800;
+  background: rgba(12, 15, 20, 0.85);
+  padding: 1px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ----------------- MODAL DIALOGS ----------------- */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+.modal.on {
+  display: flex;
+}
+
+.modal-card {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+  width: 100%;
+  max-width: 440px;
+  max-height: 90vh;
+  overflow-y: auto;
+  text-align: center;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.6);
+}
+
+.modal-card h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.modal-card p.desc {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.setting-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.setting-label {
+  font-size: 13px;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  font-weight: 700;
+}
+
+.setting-hint {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.audio-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.audio-status {
+  font-size: 13px;
+  color: var(--text-main);
+  background: var(--bg-surface);
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  word-break: break-all;
+}
+
+.audio-btns {
+  display: flex;
+  gap: 8px;
+}
+
+.sub-btn {
+  flex: 1;
+  min-height: var(--touch-min);
+  background: var(--bg-surface);
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color .15s;
+}
+
+.sub-btn:hover {
+  background: var(--border-subtle);
+}
+
+.sub-btn:active {
+  transform: scale(.98);
+}
+
+.sub-btn.danger {
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+.sub-btn.danger:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.slot {
+  background: var(--bg-surface);
+  border: 2px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  aspect-ratio: 1;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  cursor: pointer;
+  transition: border-color .15s, transform .12s;
+  min-height: var(--touch-min);
+}
+
+.slot:hover {
+  border-color: var(--color-focus);
+}
+
+.slot:active {
+  transform: scale(.96);
+}
+
+.slot span {
+  position: absolute;
+  bottom: 4px;
+  left: 0;
+  right: 0;
+  font-size: 12px;
+  color: var(--text-main);
+  font-weight: 800;
+  background: rgba(12, 15, 20, 0.88);
+  padding: 2px 0;
+  border-radius: 0 0 10px 10px;
+}
+
+.slot input {
+  display: none;
+}
+
+.modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.btn-primary {
+  min-height: var(--touch-min);
+  background: var(--color-primary);
+  color: var(--color-primary-text);
+  border: 0;
+  border-radius: var(--radius-md);
+  padding: 13px 18px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color .15s, transform .12s;
+}
+
+.btn-primary:hover {
+  background: var(--color-primary-hover);
+}
+
+.btn-primary:active {
+  transform: scale(.98);
+}
+
+.btn-secondary {
+  min-height: var(--touch-min);
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s;
+}
+
+.btn-secondary:hover {
+  background: var(--border-subtle);
+}
+
+.btn-danger {
+  min-height: var(--touch-min);
+  background: transparent;
+  color: #fca5a5;
+  border: 1px solid #7f1d1d;
+  border-radius: var(--radius-md);
+  padding: 11px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color .15s, color .15s;
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.win-stat-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 18px 0 22px;
+}
+
+.win-stat-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
+  text-align: center;
+}
+
+.win-stat-card span {
+  font-size: 13px;
+  color: var(--text-muted);
+  display: block;
+}
+
+.win-stat-card b {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--color-warning);
+  margin-top: 4px;
+  display: block;
+}
+
+/* ----------------- TOAST & CONFETTI ----------------- */
+#toastContainer {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10000;
+  pointer-events: none;
+  width: 90%;
+  max-width: 380px;
+}
+
+.toast {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-strong);
+  padding: 12px 18px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: toastIn .22s cubic-bezier(.2, 0, .2, 1);
+  transition: opacity .2s, transform .2s;
+}
+
+.toast.toast-success {
+  border-left: 4px solid var(--color-primary);
+}
+
+.toast.toast-error {
+  border-left: 4px solid var(--color-danger);
+}
+
+.toast.toast-info {
+  border-left: 4px solid var(--color-focus);
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#confettiCanvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1000;
+}
+</style>
+</head>
+<body>
+
+<!-- Live announcer for accessibility screen readers -->
+<div id="liveAnnouncer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+<!-- Confetti Canvas -->
+<canvas id="confettiCanvas"></canvas>
+
+<!-- In-app Toast container -->
+<div id="toastContainer" aria-live="polite"></div>
+
+<!-- ================= 1. HOMESCREEN ================= -->
+<div id="homeScreen">
+  <div class="home-content">
+    <div class="home-hero" aria-hidden="true">
+      <div class="hero-tile" id="heroTile1"></div>
+      <div class="hero-tile mid" id="heroTile6"></div>
+      <div class="hero-tile right" id="heroTile3"></div>
+    </div>
+
+    <h1 class="home-title">Game Gabung</h1>
+    <p class="home-desc">Geser dan gabungkan gambar berlevel sama hingga terkumpul 3 buah gambar Level 6 secepat mungkin!</p>
+
+    <div class="home-records">
+      <div class="record-card">
+        <span class="record-label">⏱️ Waktu Terbaik</span>
+        <b id="homeBestTime">--:--</b>
+      </div>
+      <div class="record-card">
+        <span class="record-label">🏆 Skor Terbaik</span>
+        <b id="homeBestScore">0</b>
+      </div>
+    </div>
+
+    <button class="btn-play-main" id="playBtn" aria-label="Mulai Bermain">
+      <span>▶️</span> Mulai Bermain
+    </button>
+    <button class="btn-home-settings" id="homeSettingsBtn" aria-label="Kustomisasi Gambar dan Suara">
+      ⚙️ Kustomisasi (Gambar & Suara)
+    </button>
+  </div>
+</div>
+
+<!-- ================= 2. GAME SCREEN ================= -->
+<div id="app">
+  <header>
+    <div class="stats" role="status">
+      <div class="stat-group">
+        <span class="stat-label">Skor</span>
+        <span class="stat-value" id="score">0</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Waktu</span>
+        <span class="stat-value highlight" id="timer">00:00</span>
+      </div>
+      <div class="stat-group">
+        <span class="stat-label">Target Lv 6</span>
+        <span class="stat-value target" id="targetLv6">0/3</span>
+      </div>
+    </div>
+    <div class="header-btns">
+      <button class="icon-btn" id="undoBtn" title="Batal langkah terakhir" aria-label="Batal langkah terakhir" disabled>
+        ↩️ Undo
+      </button>
+      <button class="icon-btn" id="homeBtn" title="Kembali ke beranda" aria-label="Kembali ke beranda">
+        🏠 Home
+      </button>
+      <button class="icon-btn" id="muteBtn" title="Pengaturan suara" aria-label="Pengaturan suara">
+        🔊 Suara
+      </button>
+      <button class="icon-btn" id="menuBtn" title="Menu dan pengaturan" aria-label="Menu dan pengaturan">
+        ⚙️
+      </button>
+    </div>
+  </header>
+
+  <div id="targetBar">
+    <div class="target-hint">Kumpulkan 3 gambar Level 6 untuk tamat!</div>
+    <div class="target-badge" aria-label="Progres Level 6: 0 dari 3">
+      <span>Level 6</span>
+      <span class="dots" aria-hidden="true">
+        <span class="dot" id="dot0"></span>
+        <span class="dot" id="dot1"></span>
+        <span class="dot" id="dot2"></span>
+      </span>
+    </div>
+  </div>
+
+  <div id="boardWrap">
+    <div id="board" role="grid" aria-label="Papan Permainan 3 kali 3" tabindex="0"></div>
+  </div>
+
+  <div id="legendWrap">
+    <div class="legend-title">Hierarki Gambar (Level 1 s/d 6)</div>
+    <div id="legend" aria-label="Daftar tingkatan level gambar"></div>
+  </div>
+</div>
+
+<!-- ================= 3. MODAL MENU & KUSTOMISASI ================= -->
+<div class="modal" id="menuModal" role="dialog" aria-modal="true" aria-labelledby="menuTitle">
+  <div class="modal-card">
+    <h2 id="menuTitle">Pengaturan Game</h2>
+    <p class="desc">Kustomisasi gambar level dan suara kemenangan khusus.</p>
+
+    <!-- Upload Suara Kustom Kemenangan -->
+    <div class="setting-group">
+      <div class="setting-label">🎵 Suara Kemenangan (Finished Sound)</div>
+      <div class="setting-hint">
+        Putar suara ini saat berhasil mengumpulkan 3 buah gambar Level 6 (Format .mp3, maks 1 menit).
+      </div>
+      <div class="audio-box">
+        <div class="audio-status" id="audioStatus">Suara: Bawaan (Default Video Fanfare)</div>
+        <div class="audio-btns">
+          <label class="sub-btn" style="cursor:pointer">
+            📁 Upload MP3
+            <input type="file" id="winAudioInput" accept="audio/mp3,audio/mpeg,.mp3">
+          </label>
+          <button class="sub-btn" id="testAudioBtn">▶️ Tes Suara</button>
+          <button class="sub-btn danger" id="resetAudioBtn">🗑️ Hapus</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Upload Gambar Tiap Level -->
+    <div class="setting-group">
+      <div class="setting-label">🖼️ Gambar Kustom Level (1 s/d 6)</div>
+      <div class="setting-hint">
+        Pilih kotak di bawah untuk upload foto custom dari galeri HP atau PC.
+      </div>
+      <div class="slots" id="slots"></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-primary" id="closeMenuBtn">Lanjut Main</button>
+      <button class="btn-secondary" id="restartBtn">Mulai Ulang Game</button>
+      <button class="btn-danger" id="resetImgsBtn">Reset Gambar ke Bawaan (Angka)</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 4. MODAL WIN (FINISHED) ================= -->
+<div class="modal" id="winModal" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+  <div class="modal-card">
+    <div style="font-size:48px;margin-bottom:6px" aria-hidden="true">🏆</div>
+    <h2 id="winTitle" style="color:var(--color-primary)">Tamat! Kamu Menang!</h2>
+    <p class="desc">Hebat! Kamu berhasil mengumpulkan 3 buah gambar Level 6 di papan!</p>
+
+    <div class="win-stat-grid">
+      <div class="win-stat-card">
+        <span>Waktu Selesai</span>
+        <b id="finalTime">00:00</b>
+      </div>
+      <div class="win-stat-card">
+        <span>Waktu Terbaik</span>
+        <b id="bestTime">--:--</b>
+      </div>
+      <div class="win-stat-card" style="grid-column:span 2">
+        <span>Total Skor</span>
+        <b id="winFinalScore" style="font-size:26px;color:var(--text-main)">0</b>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="winAgainBtn">Main Lagi</button>
+  </div>
+</div>
+
+<!-- ================= 5. MODAL GAME OVER ================= -->
+<div class="modal" id="overModal" role="dialog" aria-modal="true" aria-labelledby="overTitle">
+  <div class="modal-card">
+    <h2 id="overTitle">Game Over!</h2>
+    <p class="desc">Papan sudah penuh dan tidak ada pasangan yang bisa digabungkan lagi.</p>
+    <div style="font-size:32px;font-weight:900;margin:14px 0 20px;color:var(--text-main)" id="finalScore">0</div>
+    <button class="btn-primary" id="againBtn">Coba Lagi</button>
+  </div>
+</div>
+
+<!-- ================= 6. MODAL KONFIRMASI (PENGGANTI WINDOW.CONFIRM) ================= -->
+<div class="modal" id="confirmModal" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+  <div class="modal-card" style="max-width:360px">
+    <h2 id="confirmTitle" style="font-size:18px">Konfirmasi</h2>
+    <p class="desc" id="confirmMessage" style="margin-bottom:18px">Apakah Anda yakin?</p>
+    <div class="modal-actions" style="flex-direction:row;justify-content:center">
+      <button class="btn-secondary" id="confirmCancelBtn" style="flex:1">Batal</button>
+      <button class="btn-primary" id="confirmOkBtn" style="flex:1">Ya, Lanjutkan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const LEVELS = 6;
+const N = 3;
+const SIZE = N * N;
+const TARGET_LV6_COUNT = 3;
+const $ = s => document.querySelector(s);
+const board = $('#board');
+
+// ----------------- NON-BLOCKING ACCESSIBLE TOAST & CONFIRM -----------------
+function announceLive(msg) {
+  const el = $('#liveAnnouncer');
+  if (el) el.textContent = msg;
+}
+
+function showToast(message, type = 'info') {
+  announceLive(message);
+  const container = $('#toastContainer');
+  const toast = document.createElement('div');
+  toast.className = `toast toast-${type}`;
+  toast.setAttribute('role', 'alert');
+
+  const icon = type === 'success' ? '✅' : (type === 'error' ? '⚠️' : 'ℹ️');
+  toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(-10px)';
+    setTimeout(() => toast.remove(), 250);
+  }, 2800);
+}
+
+let pendingConfirmCallback = null;
+function showConfirm(title, message, onConfirm) {
+  $('#confirmTitle').textContent = title;
+  $('#confirmMessage').textContent = message;
+  pendingConfirmCallback = onConfirm;
+  $('#confirmModal').classList.add('on');
+}
+
+$('#confirmCancelBtn').onclick = () => {
+  $('#confirmModal').classList.remove('on');
+  pendingConfirmCallback = null;
+};
+
+$('#confirmOkBtn').onclick = () => {
+  $('#confirmModal').classList.remove('on');
+  if (typeof pendingConfirmCallback === 'function') {
+    pendingConfirmCallback();
+  }
+  pendingConfirmCallback = null;
+};
+
+// ----------------- INDEXEDDB UNTUK MENYIMPAN SUARA MP3 KUSTOM -----------------
+const DB_NAME = 'GameGabungDB';
+const DB_STORE = 'soundStore';
+
+function getDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = () => req.result.createObjectStore(DB_STORE);
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function saveCustomWinSound(blob, filename, duration) {
+  const db = await getDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(DB_STORE, 'readwrite');
+    tx.objectStore(DB_STORE).put({ blob, filename, duration }, 'win_sound');
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+async function loadCustomWinSound() {
+  const db = await getDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(DB_STORE, 'readonly');
+    const req = tx.objectStore(DB_STORE).get('win_sound');
+    req.onsuccess = () => res(req.result);
+    req.onerror = () => rej(req.error);
+  });
+}
+
+async function removeCustomWinSound() {
+  const db = await getDB();
+  return new Promise((res, rej) => {
+    const tx = db.transaction(DB_STORE, 'readwrite');
+    tx.objectStore(DB_STORE).delete('win_sound');
+    tx.oncomplete = () => res();
+    tx.onerror = () => rej(tx.error);
+  });
+}
+
+// ----------------- GAMBAR DEFAULT PLACEHOLDER (ANGKA 1 - 6) -----------------
+const DEFAULT_IMGS = [
+  'images/level_1.png',
+  'images/level_2.png',
+  'images/level_3.png',
+  'images/level_4.png',
+  'images/level_5.png',
+  'images/level_6.png'
+];
+
+let customImgs = JSON.parse(localStorage.getItem('gabung_custom_imgs') || 'null') || Array(LEVELS).fill(null);
+const getImgSrc = i => customImgs[i] || DEFAULT_IMGS[i];
+
+function updateHeroTiles() {
+  $('#heroTile1').style.backgroundImage = `url(${getImgSrc(0)})`;
+  $('#heroTile6').style.backgroundImage = `url(${getImgSrc(5)})`;
+  $('#heroTile3').style.backgroundImage = `url(${getImgSrc(2)})`;
+}
+
+function resizeImageFile(file) {
+  return new Promise(res => {
+    const fr = new FileReader();
+    fr.onload = () => {
+      const im = new Image();
+      im.onload = () => {
+        const max = 360;
+        const scale = Math.min(1, max / Math.max(im.width, im.height));
+        const cvs = document.createElement('canvas');
+        cvs.width = im.width * scale;
+        cvs.height = im.height * scale;
+        const ctx = cvs.getContext('2d');
+        ctx.drawImage(im, 0, 0, cvs.width, cvs.height);
+        res(cvs.toDataURL('image/png'));
+      };
+      im.src = fr.result;
+    };
+    fr.readAsDataURL(file);
+  });
+}
+
+function saveCustomImgs() {
+  try {
+    localStorage.setItem('gabung_custom_imgs', JSON.stringify(customImgs));
+  } catch (e) {
+    showToast('Penyimpanan lokal penuh, coba gunakan gambar lebih kecil.', 'error');
+  }
+}
+
+function buildMenuSlots() {
+  const container = $('#slots');
+  container.innerHTML = '';
+  for (let i = 0; i < LEVELS; i++) {
+    const label = document.createElement('label');
+    label.className = 'slot';
+    label.style.backgroundImage = `url(${getImgSrc(i)})`;
+    label.tabIndex = 0;
+    label.setAttribute('role', 'button');
+    label.setAttribute('aria-label', `Ubah gambar Level ${i + 1}`);
+    label.innerHTML = `<span>Level ${i + 1}</span><input type="file" accept="image/*">`;
+    label.querySelector('input').onchange = async e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      customImgs[i] = await resizeImageFile(f);
+      saveCustomImgs();
+      buildMenuSlots();
+      renderBoard();
+      buildLegend();
+      updateHeroTiles();
+      showToast(`Gambar Level ${i + 1} berhasil diperbarui!`, 'success');
+    };
+    label.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        label.querySelector('input').click();
+      }
+    });
+    container.appendChild(label);
+  }
+}
+
+function buildLegend() {
+  const legend = $('#legend');
+  legend.innerHTML = '';
+  for (let i = 0; i < LEVELS; i++) {
+    const d = document.createElement('div');
+    d.className = 'legend-item';
+    d.style.backgroundImage = `url(${getImgSrc(i)})`;
+    d.setAttribute('title', `Level ${i + 1}`);
+    d.innerHTML = `<span>${i + 1}</span>`;
+    legend.appendChild(d);
+  }
+}
+
+// ----------------- AUDIO & TIMER SISTEM -----------------
+let audioMuted = localStorage.getItem('gabung_muted') === '1';
+let audioCtx = null;
+const audioBuffers = new Map();
+let currentCustomWinSound = null;
+let testAudioObj = null;
+
+function initAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+}
+
+async function preloadAudioCuts() {
+  for (let lv = 2; lv <= LEVELS; lv++) {
+    const path = `audio/cuts/level_${lv}.mp3`;
+    fetch(path)
+      .then(res => res.arrayBuffer())
+      .then(buf => audioCtx ? audioCtx.decodeAudioData(buf) : null)
+      .then(decoded => {
+        if (decoded) audioBuffers.set(lv, decoded);
+      })
+      .catch(() => {});
+  }
+}
+
+function playLevelAudio(level) {
+  if (audioMuted) return;
+  initAudioContext();
+
+  const buf = audioBuffers.get(level);
+  if (buf && audioCtx) {
+    try {
+      const src = audioCtx.createBufferSource();
+      const gain = audioCtx.createGain();
+      gain.gain.value = 1.0;
+      src.buffer = buf;
+      src.connect(gain).connect(audioCtx.destination);
+      src.start();
+      return;
+    } catch (e) {}
+  }
+
+  const aud = new Audio(`audio/cuts/level_${level}.mp3`);
+  aud.volume = 1.0;
+  aud.play().catch(() => {});
+}
+
+function playVictorySound() {
+  if (audioMuted) return;
+  initAudioContext();
+
+  if (currentCustomWinSound && currentCustomWinSound.blob) {
+    try {
+      const url = currentCustomWinSound.url || URL.createObjectURL(currentCustomWinSound.blob);
+      const aud = new Audio(url);
+      aud.volume = 1.0;
+      aud.play().catch(() => {});
+      return;
+    } catch (e) {}
+  }
+
+  playLevelAudio(6);
+}
+
+function playTone(freq, dur = 0.05, type = 'sine') {
+  if (audioMuted || !audioCtx) return;
+  try {
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    g.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+    osc.connect(g).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + dur);
+  } catch (e) {}
+}
+
+function updateMuteButton() {
+  $('#muteBtn').textContent = audioMuted ? '🔇 Bisu' : '🔊 Suara';
+  $('#muteBtn').setAttribute('aria-label', audioMuted ? 'Suara dimatikan (Bisu)' : 'Suara aktif');
+}
+
+$('#muteBtn').onclick = () => {
+  initAudioContext();
+  audioMuted = !audioMuted;
+  localStorage.setItem('gabung_muted', audioMuted ? '1' : '0');
+  updateMuteButton();
+  showToast(audioMuted ? 'Suara dinonaktifkan' : 'Suara diaktifkan');
+};
+
+// Timer Functionality
+let timerRunning = false;
+let elapsedSeconds = 0;
+let timerInterval = null;
+
+function formatTime(sec) {
+  const m = Math.floor(sec / 60).toString().padStart(2, '0');
+  const s = (sec % 60).toString().padStart(2, '0');
+  return `${m}:${s}`;
+}
+
+function startTimer() {
+  if (timerRunning) return;
+  timerRunning = true;
+  timerInterval = setInterval(() => {
+    elapsedSeconds++;
+    $('#timer').textContent = formatTime(elapsedSeconds);
+  }, 1000);
+}
+
+function stopTimer() {
+  if (!timerRunning) return;
+  timerRunning = false;
+  clearInterval(timerInterval);
+}
+
+function resetTimer() {
+  stopTimer();
+  elapsedSeconds = 0;
+  $('#timer').textContent = '00:00';
+}
+
+function updateHomeRecords() {
+  const bestSec = localStorage.getItem('gabung_best_time_sec');
+  const bestScore = localStorage.getItem('gabung_best_score') || '0';
+  $('#homeBestTime').textContent = bestSec ? formatTime(Number(bestSec)) : '--:--';
+  $('#homeBestScore').textContent = Number(bestScore).toLocaleString();
+}
+
+// ----------------- PENGATURAN SUARA KUSTOM -----------------
+async function initCustomAudioUI() {
+  const saved = await loadCustomWinSound();
+  if (saved && saved.blob) {
+    saved.url = URL.createObjectURL(saved.blob);
+    currentCustomWinSound = saved;
+    $('#audioStatus').textContent = `Suara: ${saved.filename} (${formatTime(Math.round(saved.duration))})`;
+  } else {
+    currentCustomWinSound = null;
+    $('#audioStatus').textContent = 'Suara: Bawaan (Default Video Fanfare)';
+  }
+}
+
+$('#winAudioInput').onchange = async e => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const isMp3 = file.name.toLowerCase().endsWith('.mp3') || file.type.includes('mpeg') || file.type.includes('mp3');
+  if (!isMp3) {
+    showToast('Format file tidak didukung! Wajib file .mp3.', 'error');
+    e.target.value = '';
+    return;
+  }
+
+  const tempUrl = URL.createObjectURL(file);
+  const tempAudio = new Audio();
+  tempAudio.src = tempUrl;
+
+  tempAudio.onloadedmetadata = async () => {
+    const dur = tempAudio.duration;
+    if (dur > 60.5) {
+      showToast(`Durasi audio (${formatTime(Math.round(dur))}) melebihi batas 1 menit!`, 'error');
+      URL.revokeObjectURL(tempUrl);
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      await saveCustomWinSound(file, file.name, dur);
+      if (currentCustomWinSound && currentCustomWinSound.url) {
+        URL.revokeObjectURL(currentCustomWinSound.url);
+      }
+      currentCustomWinSound = { blob: file, filename: file.name, duration: dur, url: tempUrl };
+      $('#audioStatus').textContent = `Suara: ${file.name} (${formatTime(Math.round(dur))})`;
+      showToast('Berhasil menyimpan suara kemenangan!', 'success');
+    } catch (err) {
+      showToast('Gagal menyimpan file audio: ' + err.message, 'error');
+    }
+    e.target.value = '';
+  };
+
+  tempAudio.onerror = () => {
+    showToast('Gagal membaca file MP3. Pastikan file valid.', 'error');
+    URL.revokeObjectURL(tempUrl);
+    e.target.value = '';
+  };
+};
+
+$('#testAudioBtn').onclick = () => {
+  if (testAudioObj) {
+    testAudioObj.pause();
+    testAudioObj = null;
+    $('#testAudioBtn').textContent = '▶️ Tes Suara';
+    return;
+  }
+
+  let srcUrl = null;
+  if (currentCustomWinSound && currentCustomWinSound.url) {
+    srcUrl = currentCustomWinSound.url;
+  } else {
+    srcUrl = 'audio/cuts/level_6.mp3';
+  }
+
+  testAudioObj = new Audio(srcUrl);
+  testAudioObj.volume = 1.0;
+  testAudioObj.play().then(() => {
+    $('#testAudioBtn').textContent = '⏹️ Stop';
+  }).catch(() => {});
+
+  testAudioObj.onended = () => {
+    testAudioObj = null;
+    $('#testAudioBtn').textContent = '▶️ Tes Suara';
+  };
+};
+
+$('#resetAudioBtn').onclick = () => {
+  showConfirm('Hapus Suara Kustom?', 'Kembalikan suara kemenangan ke suara bawaan video?', async () => {
+    if (testAudioObj) {
+      testAudioObj.pause();
+      testAudioObj = null;
+      $('#testAudioBtn').textContent = '▶️ Tes Suara';
+    }
+    await removeCustomWinSound();
+    currentCustomWinSound = null;
+    $('#audioStatus').textContent = 'Suara: Bawaan (Default Video Fanfare)';
+    showToast('Suara kemenangan dikembalikan ke bawaan.', 'info');
+  });
+};
+
+['touchstart', 'pointerdown', 'click'].forEach(evt => {
+  addEventListener(evt, () => {
+    initAudioContext();
+    preloadAudioCuts();
+  }, { once: true, passive: true });
+});
+
+// ----------------- GAMEPLAY ENGINE & UNDO STATE -----------------
+let grid = Array(SIZE).fill(0);
+let score = 0;
+let isGameFinished = false;
+let isGameOver = false;
+let popCellIdx = -1;
+let historyStack = [];
+let focusedCellIdx = 0;
+let selectedTileCellIdx = -1;
+
+function saveHistoryState() {
+  historyStack.push({
+    grid: [...grid],
+    score: score,
+    elapsedSeconds: elapsedSeconds
+  });
+  if (historyStack.length > 10) historyStack.shift();
+  updateUndoButton();
+}
+
+function updateUndoButton() {
+  const btn = $('#undoBtn');
+  if (btn) {
+    btn.disabled = historyStack.length === 0 || isGameFinished || isGameOver;
+  }
+}
+
+function handleUndo() {
+  if (historyStack.length === 0 || isGameFinished || isGameOver) return;
+  const prev = historyStack.pop();
+  grid = [...prev.grid];
+  score = prev.score;
+  selectedTileCellIdx = -1;
+  updateStats();
+  renderBoard();
+  updateUndoButton();
+  playTone(280, 0.06, 'sine');
+  showToast('Langkah berhasil dibatalkan (Undo)', 'info');
+  announceLive('Langkah dibatalkan.');
+}
+
+$('#undoBtn').onclick = handleUndo;
+
+function newGame() {
+  grid = Array(SIZE).fill(0);
+  score = 0;
+  isGameFinished = false;
+  isGameOver = false;
+  historyStack = [];
+  selectedTileCellIdx = -1;
+  updateUndoButton();
+  resetTimer();
+
+  // 8 kotak level 1, 1 kotak kosong di awal (posisi index 1 kosong)
+  for (let i = 0; i < SIZE; i++) {
+    grid[i] = (i === 1) ? 0 : 1;
+  }
+
+  updateStats();
+  renderBoard();
+  announceLive('Game baru dimulai. Papan siap dimainkan.');
+}
+
+function updateStats() {
+  $('#score').textContent = score.toLocaleString();
+
+  const lv6Count = grid.filter(v => v === 6).length;
+  $('#targetLv6').textContent = `${lv6Count}/${TARGET_LV6_COUNT}`;
+
+  for (let i = 0; i < TARGET_LV6_COUNT; i++) {
+    const dot = $(`#dot${i}`);
+    if (dot) {
+      if (i < lv6Count) dot.classList.add('filled');
+      else dot.classList.remove('filled');
+    }
+  }
+
+  const prevBestScore = Number(localStorage.getItem('gabung_best_score') || 0);
+  if (score > prevBestScore) {
+    localStorage.setItem('gabung_best_score', score);
+  }
+}
+
+function spawnRandomTile() {
+  const empties = [];
+  for (let i = 0; i < SIZE; i++) {
+    if (grid[i] === 0) empties.push(i);
+  }
+  if (!empties.length) return -1;
+  const picked = empties[Math.floor(Math.random() * empties.length)];
+  grid[picked] = 1;
+  return picked;
+}
+
+function checkGameOver() {
+  if (grid.includes(0)) return false;
+
+  const count = {};
+  for (const v of grid) {
+    if (v > 0 && v < LEVELS) {
+      count[v] = (count[v] || 0) + 1;
+      if (count[v] >= 2) return false;
+    }
+  }
+  return true;
+}
+
+// ----------------- LIGHTWEIGHT CANVAS CONFETTI -----------------
+function runConfetti() {
+  const canvas = $('#confettiCanvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  const particles = [];
+  const colors = ['#22c55e', '#38bdf8', '#f59e0b', '#ec4899', '#a855f7', '#eab308'];
+  for (let i = 0; i < 90; i++) {
+    particles.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      vx: (Math.random() - 0.5) * 16,
+      vy: (Math.random() - 0.7) * 18,
+      size: Math.random() * 8 + 4,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      vRot: (Math.random() - 0.5) * 10,
+      life: 1.0,
+      decay: Math.random() * 0.015 + 0.01
+    });
+  }
+
+  let animId = null;
+  function updateConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let active = 0;
+
+    for (const p of particles) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.35; // gravity
+      p.rotation += p.vRot;
+      p.life -= p.decay;
+
+      if (p.life > 0) {
+        active++;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate((p.rotation * Math.PI) / 180);
+        ctx.globalAlpha = Math.max(0, p.life);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.6);
+        ctx.restore();
+      }
+    }
+
+    if (active > 0) {
+      animId = requestAnimationFrame(updateConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      cancelAnimationFrame(animId);
+    }
+  }
+  updateConfetti();
+}
+
+function triggerVictory() {
+  isGameFinished = true;
+  stopTimer();
+  playVictorySound();
+  runConfetti();
+
+  const formattedTime = formatTime(elapsedSeconds);
+  $('#finalTime').textContent = formattedTime;
+  $('#winFinalScore').textContent = score.toLocaleString();
+
+  const prevBestTime = localStorage.getItem('gabung_best_time_sec');
+  if (!prevBestTime || elapsedSeconds < Number(prevBestTime)) {
+    localStorage.setItem('gabung_best_time_sec', elapsedSeconds);
+    $('#bestTime').textContent = formattedTime + ' (Rekor Baru!)';
+  } else {
+    $('#bestTime').textContent = formatTime(Number(prevBestTime));
+  }
+
+  updateHomeRecords();
+  announceLive(`Selamat! Kamu menang dalam waktu ${formattedTime}! Skor total: ${score}`);
+  setTimeout(() => $('#winModal').classList.add('on'), 400);
+}
+
+function showFloatText(cellIdx, text) {
+  const cell = board.children[cellIdx];
+  if (!cell) return;
+  const ft = document.createElement('div');
+  ft.className = 'float-text';
+  ft.textContent = text;
+  ft.style.left = '50%';
+  ft.style.top = '50%';
+  cell.appendChild(ft);
+  setTimeout(() => ft.remove(), 650);
+}
+
+// ----------------- BOARD RENDERING & CELL ACCESSIBILITY -----------------
+function renderBoard() {
+  board.innerHTML = '';
+  for (let i = 0; i < SIZE; i++) {
+    const row = Math.floor(i / N) + 1;
+    const col = (i % N) + 1;
+    const val = grid[i];
+
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    cell.dataset.i = i;
+    cell.setAttribute('role', 'gridcell');
+    cell.setAttribute('tabindex', '0');
+    cell.style.left = (i % N) * (100 / N) + '%';
+    cell.style.top = Math.floor(i / N) * (100 / N) + '%';
+
+    if (i === selectedTileCellIdx) {
+      cell.classList.add('selected-cell');
+    }
+
+    const cellName = `Baris ${row}, Kolom ${col}`;
+    if (val > 0) {
+      cell.setAttribute('aria-label', `${cellName}: Ubin Level ${val}`);
+      const tile = document.createElement('div');
+      tile.className = 'tile' + (i === popCellIdx ? ' pop' : '');
+      tile.style.backgroundImage = `url(${getImgSrc(val - 1)})`;
+      tile.innerHTML = `<span class="lv">${val}</span>`;
+      tile.addEventListener('pointerdown', e => onPointerDownTile(e, i, tile));
+      cell.appendChild(tile);
+    } else {
+      cell.setAttribute('aria-label', `${cellName}: Kosong`);
+    }
+
+    // Keyboard cell click / selection
+    cell.addEventListener('click', () => handleCellSelection(i));
+    cell.addEventListener('keydown', e => handleCellKeyDown(e, i));
+
+    board.appendChild(cell);
+  }
+  popCellIdx = -1;
+}
+
+// ----------------- KEYBOARD NAVIGATION & INTERACTION -----------------
+function handleCellSelection(targetIdx) {
+  if (isGameFinished || isGameOver) return;
+
+  // Case 1: No tile currently selected
+  if (selectedTileCellIdx === -1) {
+    if (grid[targetIdx] > 0) {
+      selectedTileCellIdx = targetIdx;
+      playTone(520, 0.04, 'sine');
+      announceLive(`Ubin Level ${grid[targetIdx]} dipilih. Pilih sel tujuan.`);
+      renderBoard();
+    }
+    return;
+  }
+
+  // Case 2: User taps the same selected tile again -> Deselect
+  if (selectedTileCellIdx === targetIdx) {
+    selectedTileCellIdx = -1;
+    playTone(350, 0.04, 'sine');
+    announceLive('Pilihan ubin dibatalkan.');
+    renderBoard();
+    return;
+  }
+
+  // Case 3: Move or Merge from selectedTileCellIdx to targetIdx
+  executeMove(selectedTileCellIdx, targetIdx);
+  selectedTileCellIdx = -1;
+}
+
+function handleCellKeyDown(e, currentIdx) {
+  const row = Math.floor(currentIdx / N);
+  const col = currentIdx % N;
+
+  let nextIdx = currentIdx;
+  if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+    nextIdx = row * N + ((col + 1) % N);
+    e.preventDefault();
+  } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+    nextIdx = row * N + ((col - 1 + N) % N);
+    e.preventDefault();
+  } else if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') {
+    nextIdx = ((row + 1) % N) * N + col;
+    e.preventDefault();
+  } else if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') {
+    nextIdx = ((row - 1 + N) % N) * N + col;
+    e.preventDefault();
+  } else if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    handleCellSelection(currentIdx);
+    return;
+  } else if (e.key === 'Escape') {
+    if (selectedTileCellIdx !== -1) {
+      selectedTileCellIdx = -1;
+      announceLive('Pilihan dibatalkan.');
+      renderBoard();
+      e.preventDefault();
+    }
+    return;
+  }
+
+  if (nextIdx !== currentIdx) {
+    focusedCellIdx = nextIdx;
+    board.children[nextIdx]?.focus();
+  }
+}
+
+// ----------------- DRAG & DROP PRESISI DENGAN MOVE SAFEGUARDS -----------------
+let dragSession = null;
+
+function getCellIndexAtPoint(x, y) {
+  const rect = board.getBoundingClientRect();
+  if (x < rect.left || x > rect.right || y < rect.top || y > rect.bottom) return -1;
+  const col = Math.min(N - 1, Math.max(0, Math.floor((x - rect.left) / (rect.width / N))));
+  const row = Math.min(N - 1, Math.max(0, Math.floor((y - rect.top) / (rect.height / N))));
+  return row * N + col;
+}
+
+function onPointerDownTile(e, cellIdx, tileEl) {
+  if (dragSession || isGameFinished || isGameOver) return;
+  e.preventDefault();
+
+  startTimer();
+  initAudioContext();
+  playTone(550, 0.04, 'sine');
+
+  const rect = tileEl.getBoundingClientRect();
+  dragSession = {
+    cellIdx,
+    tileEl,
+    offsetX: e.clientX - rect.left,
+    offsetY: e.clientY - rect.top,
+    width: rect.width,
+    height: rect.height,
+    highlightedCell: -1
+  };
+
+  tileEl.classList.add('drag');
+  tileEl.style.position = 'fixed';
+  tileEl.style.width = rect.width + 'px';
+  tileEl.style.height = rect.height + 'px';
+  tileEl.style.left = rect.left + 'px';
+  tileEl.style.top = rect.top + 'px';
+  document.body.appendChild(tileEl);
+
+  window.addEventListener('pointermove', onPointerMove, { passive: false });
+  window.addEventListener('pointerup', onPointerUp);
+  window.addEventListener('pointercancel', onPointerUp);
+}
+
+function onPointerMove(e) {
+  if (!dragSession) return;
+  e.preventDefault();
+  const { tileEl, offsetX, offsetY } = dragSession;
+  tileEl.style.left = (e.clientX - offsetX) + 'px';
+  tileEl.style.top = (e.clientY - offsetY) + 'px';
+
+  const hoverCell = getCellIndexAtPoint(e.clientX, e.clientY);
+  if (hoverCell !== dragSession.highlightedCell) {
+    board.querySelectorAll('.hl').forEach(el => el.classList.remove('hl'));
+    if (hoverCell >= 0 && hoverCell !== dragSession.cellIdx) {
+      board.children[hoverCell]?.classList.add('hl');
+    }
+    dragSession.highlightedCell = hoverCell;
+  }
+}
+
+function onPointerUp(e) {
+  window.removeEventListener('pointermove', onPointerMove);
+  window.removeEventListener('pointerup', onPointerUp);
+  window.removeEventListener('pointercancel', onPointerUp);
+
+  if (!dragSession) return;
+  const { cellIdx, tileEl, highlightedCell } = dragSession;
+
+  let targetCell = highlightedCell;
+  if (targetCell < 0) {
+    targetCell = getCellIndexAtPoint(e.clientX, e.clientY);
+  }
+
+  dragSession = null;
+  tileEl.remove();
+
+  if (targetCell >= 0 && targetCell !== cellIdx) {
+    executeMove(cellIdx, targetCell);
+  } else {
+    renderBoard();
+  }
+}
+
+// ----------------- CORE MOVE & MERGE EXECUTION WITH ERROR PREVENTION -----------------
+function executeMove(srcIdx, targetIdx) {
+  const srcVal = Number(grid[srcIdx]);
+  const tgtVal = Number(grid[targetIdx]);
+
+  if (srcVal === 0) {
+    renderBoard();
+    return;
+  }
+
+  startTimer();
+
+  // 1. MATCHING MERGE: Both have same level < LEVELS
+  if (tgtVal === srcVal && srcVal < LEVELS) {
+    saveHistoryState();
+    const nextLevel = srcVal + 1;
+    grid[targetIdx] = nextLevel;
+    grid[srcIdx] = 0;
+    const pts = Math.pow(2, nextLevel);
+    score += pts;
+    popCellIdx = targetIdx;
+
+    playLevelAudio(nextLevel);
+    spawnRandomTile();
+
+    updateStats();
+    renderBoard();
+    showFloatText(targetIdx, `+${pts}`);
+    announceLive(`Level ${srcVal} digabung menjadi Level ${nextLevel}! +${pts} poin.`);
+
+    const lv6Total = grid.filter(v => v === 6).length;
+    if (lv6Total >= TARGET_LV6_COUNT) {
+      triggerVictory();
+      return;
+    }
+  }
+  // 2. EMPTY CELL REPOSITION: Move tile to unoccupied space
+  else if (tgtVal === 0) {
+    saveHistoryState();
+    grid[targetIdx] = srcVal;
+    grid[srcIdx] = 0;
+    playTone(420, 0.04, 'sine');
+    updateStats();
+    renderBoard();
+    announceLive(`Ubin Level ${srcVal} dipindahkan ke sel kosong.`);
+  }
+  // 3. INVALID MOVE: Target has a different level -> MOVE SAFEGUARD (Bounce back, no penalty)
+  else {
+    playTone(200, 0.08, 'sine');
+    renderBoard();
+    // Shake target cell to indicate invalid merge
+    const cellEl = board.children[targetIdx];
+    if (cellEl) {
+      cellEl.classList.add('shake');
+      setTimeout(() => cellEl.classList.remove('shake'), 300);
+    }
+    showToast('Ubin tidak cocok! Gabungkan ubin berlevel sama.', 'info');
+    announceLive('Ubin tidak cocok untuk digabung. Gerakan dibatalkan.');
+  }
+
+  if (!isGameFinished && checkGameOver()) {
+    isGameOver = true;
+    stopTimer();
+    $('#finalScore').textContent = score.toLocaleString();
+    announceLive('Game over! Papan penuh dan tidak ada pasangan tersisa.');
+    setTimeout(() => $('#overModal').classList.add('on'), 350);
+  }
+}
+
+// ----------------- NAVIGASI & UI BUTTONS -----------------
+function goToHome() {
+  stopTimer();
+  updateHomeRecords();
+  updateHeroTiles();
+  $('#homeScreen').classList.remove('hide');
+}
+
+function startGameFromHome() {
+  initAudioContext();
+  $('#homeScreen').classList.add('hide');
+  newGame();
+}
+
+$('#playBtn').onclick = startGameFromHome;
+$('#homeBtn').onclick = goToHome;
+
+$('#homeSettingsBtn').onclick = () => {
+  initAudioContext();
+  buildMenuSlots();
+  initCustomAudioUI();
+  $('#menuModal').classList.add('on');
+};
+
+$('#menuBtn').onclick = () => {
+  initAudioContext();
+  buildMenuSlots();
+  initCustomAudioUI();
+  $('#menuModal').classList.add('on');
+};
+
+$('#closeMenuBtn').onclick = () => {
+  $('#menuModal').classList.remove('on');
+};
+
+$('#restartBtn').onclick = () => {
+  $('#menuModal').classList.remove('on');
+  newGame();
+};
+
+$('#resetImgsBtn').onclick = () => {
+  showConfirm('Reset Gambar?', 'Kembalikan semua gambar ke bawaan (placeholder angka)?', () => {
+    customImgs = Array(LEVELS).fill(null);
+    localStorage.removeItem('gabung_custom_imgs');
+    buildMenuSlots();
+    renderBoard();
+    buildLegend();
+    updateHeroTiles();
+    showToast('Gambar dikembalikan ke placeholder angka.', 'info');
+  });
+};
+
+$('#winAgainBtn').onclick = () => {
+  $('#winModal').classList.remove('on');
+  newGame();
+};
+
+$('#againBtn').onclick = () => {
+  $('#overModal').classList.remove('on');
+  newGame();
+};
+
+// Global escape to close modals
+window.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    if ($('#confirmModal').classList.contains('on')) {
+      $('#confirmModal').classList.remove('on');
+      pendingConfirmCallback = null;
+    } else if ($('#menuModal').classList.contains('on')) {
+      $('#menuModal').classList.remove('on');
+    }
+  }
+});
+
+// Inisialisasi awal
+updateMuteButton();
+buildLegend();
+initCustomAudioUI();
+updateHeroTiles();
+updateHomeRecords();
+</script>
+</body>
+</html>

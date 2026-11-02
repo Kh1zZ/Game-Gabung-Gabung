@@ -1,0 +1,219 @@
+[
+  {
+    "idx": 1,
+    "start": 0.0,
+    "end": 0.27,
+    "duration": 0.27,
+    "file": "audio/cuts/cut_01.mp3"
+  },
+  {
+    "idx": 2,
+    "start": 0.27,
+    "end": 1.13,
+    "duration": 0.86,
+    "file": "audio/cuts/cut_02.mp3"
+  },
+  {
+    "idx": 3,
+    "start": 1.13,
+    "end": 2.07,
+    "duration": 0.94,
+    "file": "audio/cuts/cut_03.mp3"
+  },
+  {
+    "idx": 4,
+    "start": 2.07,
+    "end": 2.87,
+    "duration": 0.8,
+    "file": "audio/cuts/cut_04.mp3"
+  },
+  {
+    "idx": 5,
+    "start": 2.87,
+    "end": 3.87,
+    "duration": 1.0,
+    "file": "audio/cuts/cut_05.mp3"
+  },
+  {
+    "idx": 6,
+    "start": 3.87,
+    "end": 4.8,
+    "duration": 0.93,
+    "file": "audio/cuts/cut_06.mp3"
+  },
+  {
+    "idx": 7,
+    "start": 4.8,
+    "end": 5.67,
+    "duration": 0.87,
+    "file": "audio/cuts/cut_07.mp3"
+  },
+  {
+    "idx": 8,
+    "start": 5.67,
+    "end": 7.43,
+    "duration": 1.76,
+    "file": "audio/cuts/cut_08.mp3"
+  },
+  {
+    "idx": 9,
+    "start": 7.43,
+    "end": 8.37,
+    "duration": 0.94,
+    "file": "audio/cuts/cut_09.mp3"
+  },
+  {
+    "idx": 10,
+    "start": 8.37,
+    "end": 9.23,
+    "duration": 0.86,
+    "file": "audio/cuts/cut_10.mp3"
+  },
+  {
+    "idx": 11,
+    "start": 9.23,
+    "end": 10.2,
+    "duration": 0.97,
+    "file": "audio/cuts/cut_11.mp3"
+  },
+  {
+    "idx": 12,
+    "start": 10.2,
+    "end": 11.2,
+    "duration": 1.0,
+    "file": "audio/cuts/cut_12.mp3"
+  },
+  {
+    "idx": 13,
+    "start": 11.2,
+    "end": 12.07,
+    "duration": 0.87,
+    "file": "audio/cuts/cut_13.mp3"
+  },
+  {
+    "idx": 14,
+    "start": 12.07,
+    "end": 13.07,
+    "duration": 1.0,
+    "file": "audio/cuts/cut_14.mp3"
+  },
+  {
+    "idx": 15,
+    "start": 13.07,
+    "end": 13.97,
+    "duration": 0.9,
+    "file": "audio/cuts/cut_15.mp3"
+  },
+  {
+    "idx": 16,
+    "start": 13.97,
+    "end": 15.87,
+    "duration": 1.9,
+    "file": "audio/cuts/cut_16.mp3"
+  },
+  {
+    "idx": 17,
+    "start": 15.87,
+    "end": 16.83,
+    "duration": 0.96,
+    "file": "audio/cuts/cut_17.mp3"
+  },
+  {
+    "idx": 18,
+    "start": 16.83,
+    "end": 17.87,
+    "duration": 1.04,
+    "file": "audio/cuts/cut_18.mp3"
+  },
+  {
+    "idx": 19,
+    "start": 17.87,
+    "end": 18.77,
+    "duration": 0.9,
+    "file": "audio/cuts/cut_19.mp3"
+  },
+  {
+    "idx": 20,
+    "start": 18.77,
+    "end": 19.67,
+    "duration": 0.9,
+    "file": "audio/cuts/cut_20.mp3"
+  },
+  {
+    "idx": 21,
+    "start": 19.67,
+    "end": 20.6,
+    "duration": 0.93,
+    "file": "audio/cuts/cut_21.mp3"
+  },
+  {
+    "idx": 22,
+    "start": 20.6,
+    "end": 21.3,
+    "duration": 0.7,
+    "file": "audio/cuts/cut_22.mp3"
+  },
+  {
+    "idx": 23,
+    "start": 21.3,
+    "end": 23.37,
+    "duration": 2.07,
+    "file": "audio/cuts/cut_23.mp3"
+  },
+  {
+    "idx": 24,
+    "start": 23.37,
+    "end": 24.1,
+    "duration": 0.73,
+    "file": "audio/cuts/cut_24.mp3"
+  },
+  {
+    "idx": 25,
+    "start": 24.1,
+    "end": 25.03,
+    "duration": 0.93,
+    "file": "audio/cuts/cut_25.mp3"
+  },
+  {
+    "idx": 26,
+    "start": 25.03,
+    "end": 25.7,
+    "duration": 0.67,
+    "file": "audio/cuts/cut_26.mp3"
+  },
+  {
+    "idx": 27,
+    "start": 25.7,
+    "end": 28.7,
+    "duration": 3.0,
+    "file": "audio/cuts/cut_27.mp3"
+  },
+  {
+    "idx": 28,
+    "start": 28.7,
+    "end": 31.0,
+    "duration": 2.3,
+    "file": "audio/cuts/cut_28.mp3"
+  },
+  {
+    "idx": 29,
+    "start": 31.0,
+    "end": 32.07,
+    "duration": 1.07,
+    "file": "audio/cuts/cut_29.mp3"
+  },
+  {
+    "idx": 30,
+    "start": 32.07,
+    "end": 33.23,
+    "duration": 1.16,
+    "file": "audio/cuts/cut_30.mp3"
+  },
+  {
+    "idx": 31,
+    "start": 33.23,
+    "end": 34.5,
+    "duration": 1.27,
+    "file": "audio/cuts/cut_31.mp3"
+  }
+]
